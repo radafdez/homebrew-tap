@@ -32,9 +32,13 @@ cask "supabase-switch" do
   ]
 
   caveats <<~EOS
-    Supabase Switch is not notarized by Apple. The first time, open it from
-    /Applications and click "Open Anyway" in System Settings → Privacy &
-    Security. Do that before using `sbswitch`: until the app has run once,
-    macOS stops the command too. After that the app updates itself.
+    Supabase Switch is not notarized by Apple, and Homebrew installs it
+    quarantined: macOS stops `sbswitch`, and the AI agents that use it, until
+    the mark is removed. Run this once:
+
+      xattr -dr com.apple.quarantine "#{appdir}/Supabase Switch.app"
+
+    Settings → AI agents in the app shows the same command while it is needed.
+    After that the app updates itself.
   EOS
 end

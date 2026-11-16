@@ -14,10 +14,15 @@ brew install --cask radafdez/tap/supabase-switch
 
 Naming the cask in full trusts only that cask, not the rest of this tap.
 
-Supabase Switch is **not notarized** by Apple. The first time, open it from
-`/Applications` and click **Open Anyway** in **System Settings → Privacy &
-Security**. Do that before using `sbswitch`: until the app has run once,
-macOS stops the command too.
+Supabase Switch is **not notarized** by Apple, and Homebrew installs it
+quarantined: macOS stops `sbswitch`, and the AI agents that use it, until the
+mark is removed. Run this once after installing:
+
+```bash
+xattr -dr com.apple.quarantine "/Applications/Supabase Switch.app"
+```
+
+**Settings → AI agents** in the app shows the same command while it is needed.
 
 After that the app updates itself through
 [Sparkle](https://sparkle-project.org), with every update signed by the
@@ -53,10 +58,16 @@ brew install --cask radafdez/tap/supabase-switch
 ```
 
 Al nombrar el cask completo solo se confía en ese cask, no en el resto del
-tap. Supabase Switch **no está notarizada** por Apple: la primera vez, ábrela
-desde `/Applications` y pulsa **Abrir igualmente** en **Ajustes del Sistema →
-Privacidad y seguridad**. Hazlo antes de usar `sbswitch`: hasta que la app se
-abre una vez, macOS también para la orden. Después se actualiza sola con
+tap. Supabase Switch **no está notarizada** por Apple, y Homebrew la instala en
+cuarentena: macOS para `sbswitch`, y con él a los agentes de IA, hasta que se
+quita la marca. Ejecuta esto una vez tras instalarla:
+
+```bash
+xattr -dr com.apple.quarantine "/Applications/Supabase Switch.app"
+```
+
+**Ajustes → Agentes de IA** en la app enseña la misma orden mientras haga
+falta. Después se actualiza sola con
 Sparkle, y `brew upgrade` no la toca. `brew uninstall --cask --zap
 supabase-switch` la quita junto con tu lista de cuentas y tus ajustes; los
 tokens siguen en el Llavero.
