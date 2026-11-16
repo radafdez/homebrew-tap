@@ -39,6 +39,7 @@ jobs:
         if: steps.latest.outputs.changed == 'true'
         env:
           VERSION: ${{ steps.latest.outputs.version }}
+          HOMEBREW_GITHUB_API_TOKEN: ${{ github.token }}
         run: |
           ./scripts/bump.sh "$VERSION"
           git config user.name "github-actions[bot]"

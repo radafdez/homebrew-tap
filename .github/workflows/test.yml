@@ -15,4 +15,8 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - name: Install, check and uninstall the cask
+        env:
+          # `brew audit --online` asks GitHub about the repository; without a
+          # token the shared runner IPs hit the anonymous rate limit.
+          HOMEBREW_GITHUB_API_TOKEN: ${{ github.token }}
         run: ./scripts/check-cask.sh
