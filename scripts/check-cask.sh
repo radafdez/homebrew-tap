@@ -17,7 +17,10 @@ version="$(sed -n -E 's/^  version "([^"]*)"$/\1/p' Casks/supabase-switch.rb)"
 brew untap radafdez/tap 2> /dev/null || true
 brew tap radafdez/tap "$PWD"
 brew trust radafdez/tap
-brew style radafdez/tap
+# Only the cask: `brew style` on the whole tap would also hold these scripts
+# to Homebrew's own shell style. / Solo el cask: `brew style` sobre el tap
+# entero también juzgaría estos scripts con el estilo de shell de Homebrew.
+brew style --cask "$cask"
 brew audit --cask --strict --online "$cask"
 
 brew install --cask "$cask"
