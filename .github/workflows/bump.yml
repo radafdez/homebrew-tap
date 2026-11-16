@@ -1,9 +1,9 @@
-# Once a day, points the cask at the latest release of Supabase Switch. It
+# Once a day, points the cask at the latest release of Keyturn. It
 # only pushes after the new version installs and uninstalls cleanly. A push
 # made with the workflow's own token does not start Test, so the check runs
 # here, before the push.
 #
-# Una vez al día apunta el cask a la última versión de Supabase Switch. Solo
+# Una vez al día apunta el cask a la última versión de Keyturn. Solo
 # sube el cambio si la versión nueva se instala y se desinstala bien. Un push
 # hecho con el token del propio flujo no lanza Test, así que la comprobación va
 # aquí, antes del push.
@@ -27,8 +27,8 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          tag="$(gh release view -R radafdez/supabase-switch --json tagName -q .tagName)"
-          current="$(sed -n -E 's/^  version "([^"]*)"$/\1/p' Casks/supabase-switch.rb)"
+          tag="$(gh release view -R radafdez/keyturn --json tagName -q .tagName)"
+          current="$(sed -n -E 's/^  version "([^"]*)"$/\1/p' Casks/keyturn.rb)"
           echo "version=${tag#v}" >> "$GITHUB_OUTPUT"
           if [ "${tag#v}" = "$current" ]; then
             echo "The cask is already at $current"
@@ -44,6 +44,6 @@ jobs:
           ./scripts/bump.sh "$VERSION"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -am "supabase-switch $VERSION"
+          git commit -am "keyturn $VERSION"
           ./scripts/check-cask.sh
           git push

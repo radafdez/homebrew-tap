@@ -1,18 +1,18 @@
 #!/bin/bash
 # Installs the cask from this checkout's last commit, checks it, and removes
 # it again with --zap. Meant for a CI runner, a Mac with nothing to lose: it
-# installs into /Applications and links sbswitch into Homebrew's bin.
+# installs into /Applications and links keyturn into Homebrew's bin.
 #
 # Instala el cask desde el último commit de esta copia, lo comprueba y lo
 # vuelve a quitar con --zap. Pensado para un runner de CI, un Mac sin nada que
-# perder: instala en /Applications y enlaza sbswitch en el bin de Homebrew.
+# perder: instala en /Applications y enlaza keyturn en el bin de Homebrew.
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
-cask=radafdez/tap/supabase-switch
-app="/Applications/Supabase Switch.app"
-link="$(brew --prefix)/bin/sbswitch"
-version="$(sed -n -E 's/^  version "([^"]*)"$/\1/p' Casks/supabase-switch.rb)"
+cask=radafdez/tap/keyturn
+app="/Applications/Keyturn.app"
+link="$(brew --prefix)/bin/keyturn"
+version="$(sed -n -E 's/^  version "([^"]*)"$/\1/p' Casks/keyturn.rb)"
 
 brew untap radafdez/tap 2> /dev/null || true
 brew tap radafdez/tap "$PWD"
@@ -26,11 +26,11 @@ brew audit --cask --strict --online "$cask"
 brew install --cask "$cask"
 installed="$(/usr/libexec/PlistBuddy -c "Print CFBundleShortVersionString" "$app/Contents/Info.plist")"
 [ "$installed" = "$version" ] || { echo "Installed $installed, expected $version" >&2; exit 1; }
-[ "$(readlink "$link")" = "$app/Contents/MacOS/sbswitch" ] || { echo "$link does not point into the app" >&2; exit 1; }
+[ "$(readlink "$link")" = "$app/Contents/MacOS/keyturn" ] || { echo "$link does not point into the app" >&2; exit 1; }
 /usr/libexec/PlistBuddy -c "Print SUPublicEDKey" "$app/Contents/Info.plist" > /dev/null \
   || { echo "The app has no update key: Sparkle could never update it" >&2; exit 1; }
 echo "Quarantine on the app: $(xattr -p com.apple.quarantine "$app" 2> /dev/null || echo none)"
 
 brew uninstall --cask --zap "$cask"
 [ ! -e "$app" ] && [ ! -L "$link" ] || { echo "Uninstall left the app or the link behind" >&2; exit 1; }
-echo "supabase-switch $version installs, links sbswitch and uninstalls cleanly."
+echo "keyturn $version installs, links keyturn and uninstalls cleanly."
