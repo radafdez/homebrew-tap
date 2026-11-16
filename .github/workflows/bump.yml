@@ -1,0 +1,48 @@
+# Once a day, points the cask at the latest release of Supabase Switch. It
+# only pushes after the new version installs and uninstalls cleanly. A push
+# made with the workflow's own token does not start Test, so the check runs
+# here, before the push.
+#
+# Una vez al día apunta el cask a la última versión de Supabase Switch. Solo
+# sube el cambio si la versión nueva se instala y se desinstala bien. Un push
+# hecho con el token del propio flujo no lanza Test, así que la comprobación va
+# aquí, antes del push.
+name: Bump
+
+on:
+  schedule:
+    - cron: "17 6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  bump:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v7
+      - name: Find the latest release
+        id: latest
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          tag="$(gh release view -R radafdez/supabase-switch --json tagName -q .tagName)"
+          current="$(sed -n -E 's/^  version "([^"]*)"$/\1/p' Casks/supabase-switch.rb)"
+          echo "version=${tag#v}" >> "$GITHUB_OUTPUT"
+          if [ "${tag#v}" = "$current" ]; then
+            echo "The cask is already at $current"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Update, check and push
+        if: steps.latest.outputs.changed == 'true'
+        env:
+          VERSION: ${{ steps.latest.outputs.version }}
+        run: |
+          ./scripts/bump.sh "$VERSION"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -am "supabase-switch $VERSION"
+          ./scripts/check-cask.sh
+          git push
