@@ -1,6 +1,6 @@
 cask "supabase-switch" do
-  version "1.3.1"
-  sha256 "acf7bc6f7d1e2f8fc4b59f4ea802cff2a6a5d3545d633530df43203796355943"
+  version "1.3.2"
+  sha256 "c5c3d27c0e27f2afb230bfdf12efba8b2047d3d31d52da5c15a92cfa6ebad4d1"
 
   url "https://github.com/radafdez/supabase-switch/releases/download/v#{version}/Supabase-Switch-#{version}.zip"
   name "Supabase Switch"
