@@ -1,6 +1,6 @@
 cask "keyturn" do
-  version "1.4.0"
-  sha256 "845e303e1c8b794be312b87aac115d8dbb378da2fff0b1d836f93f86cd6fbea1"
+  version "1.5.1"
+  sha256 "8f16ee585ce360356a0bdd275a054f4bd34c93aec0026219d3047b1fa480ea3d"
 
   url "https://github.com/radafdez/keyturn/releases/download/v#{version}/Keyturn-#{version}.zip"
   name "Keyturn"
